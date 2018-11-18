@@ -14,6 +14,7 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
@@ -120,15 +121,21 @@ public class ColorActivity extends AppCompatActivity implements OnTouchListener,
                     }
                 }
             }
-            runOnUiThread(() -> {
-                button = (Button) findViewById(R.id.button);
-                if (isPink) {
-                    button.setVisibility(View.VISIBLE);
-                } else button.setVisibility(View.INVISIBLE);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    button = (Button) findViewById(R.id.button);
+                    if (isPink) {
+                        button.setVisibility(View.VISIBLE);
+                    } else button.setVisibility(View.INVISIBLE);
+                }
             });
         }
         count++;
-        return mRgba;
+        Mat mRgbaT = mRgba.t();
+        Core.flip(mRgba.t(), mRgbaT, 1);
+        Imgproc.resize(mRgbaT, mRgbaT, mRgba.size());
+        return mRgbaT;
     }
 
     @Override

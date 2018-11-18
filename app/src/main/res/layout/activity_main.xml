@@ -26,8 +26,8 @@
 
         <TextureView
             android:id="@+id/textureview"
-            android:layout_width="match_parent"
-            android:layout_height="305dp" />
+            android:layout_width="390dp"
+            android:layout_height="390dp" />
 
         <Button
             android:id="@+id/VR"

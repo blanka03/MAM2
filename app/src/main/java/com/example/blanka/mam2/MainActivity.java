@@ -1,9 +1,7 @@
 package com.example.blanka.mam2;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -15,12 +13,11 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
@@ -165,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, null);
         } catch (Exception e) {
-            int a = 0;
             e.printStackTrace();
         }
     }
@@ -190,7 +186,14 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         if (cameraDevice != null) {
             cameraDevice.close();
+        }
+    }
 
+    @Override
+    protected void onResume() {
+       super.onResume();
+        if (cameraDevice != null) {
+            openCamera();
         }
     }
 

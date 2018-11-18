@@ -26,7 +26,6 @@ public class ARActivity extends AppCompatActivity {
     ArFragment arFragment;
     ModelRenderable lampPostRenderable;
     @Override
-    @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!checkIsSupportedDeviceOrFinish(this)) {
