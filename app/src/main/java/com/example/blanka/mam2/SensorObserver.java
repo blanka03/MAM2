@@ -21,6 +21,5 @@ public class SensorObserver implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 }

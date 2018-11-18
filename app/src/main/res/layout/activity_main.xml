@@ -15,23 +15,41 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
             android:text="Światło: " />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp" />
 
         <TextureView
             android:id="@+id/textureview"
             android:layout_width="match_parent"
-            android:layout_height="363dp" />
+            android:layout_height="305dp" />
+
         <Button
-            android:id="@+id/getpicture"
+            android:id="@+id/VR"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="getPicture"/>
+            android:onClick="openActivityVR"
+            android:text="Go to VR" />
+
+        <Button
+            android:id="@+id/AR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="openActivityAR"
+            android:text="Go to AR" />
+
+        <Button
+            android:id="@+id/Color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="openColorActivity"
+            android:text="Color detection" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
 

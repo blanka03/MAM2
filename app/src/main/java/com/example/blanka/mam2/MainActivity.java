@@ -1,6 +1,8 @@
 package com.example.blanka.mam2;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
@@ -22,7 +24,7 @@ import android.os.Bundle;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView lightTV;
     private SensorObserver so;
     private TextureView textureView;
-    private Button takePictureButton;
     private Size previewsize;
     private CameraDevice cameraDevice;
     private CaptureRequest.Builder previewBuilder;
@@ -61,28 +62,16 @@ public class MainActivity extends AppCompatActivity {
         textureView = (TextureView) findViewById(R.id.textureview);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
-
-        takePictureButton = (Button) findViewById(R.id.getpicture);
-        /*takePictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPicture();
-            }
-        });*/
-
-
     }
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            //open your camera here
             openCamera();
         }
 
         @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            // Transform you image captured size according to the surface width and height
         }
 
         @Override
@@ -95,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @SuppressLint("MissingPermission")
     public void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(CAMERA_SERVICE);
         String camerId = null;
@@ -104,8 +94,12 @@ public class MainActivity extends AppCompatActivity {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(camerId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             previewsize = map.getOutputSizes(SurfaceTexture.class)[0];
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                return;
+            }*/
+            if (!CameraPermissionHelper.hasCameraPermission(this)) {
+                CameraPermissionHelper.requestCameraPermission(this);
                 return;
             }
             manager.openCamera(camerId, stateCallback, null);
@@ -116,12 +110,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                // close the app
-                Toast.makeText(MainActivity.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
-                finish();
+        if (!CameraPermissionHelper.hasCameraPermission(this)) {
+            Toast.makeText(this, "Camera permission is needed to run this application", Toast.LENGTH_LONG)
+                    .show();
+            if (!CameraPermissionHelper.shouldShowRequestPermissionRationale(this)) {
+                CameraPermissionHelper.launchPermissionSettings(this);
             }
+            finish();
         }
     }
 
@@ -170,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, null);
         } catch (Exception e) {
-            int a=0;
+            int a = 0;
             e.printStackTrace();
         }
     }
@@ -193,12 +188,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(cameraDevice!=null)
-        {
+        if (cameraDevice != null) {
             cameraDevice.close();
 
         }
     }
 
+    public void openActivityVR(View view) {
+        Intent i = new Intent(getBaseContext(), VRactivity.class);
+        startActivity(i);
+    }
 
+    public void openActivityAR(View view) {
+        Intent i = new Intent(getBaseContext(), ARActivity.class);
+        startActivity(i);
+    }
+
+    public void openColorActivity(View view) {
+        Intent i = new Intent(getBaseContext(), ColorActivity.class);
+        startActivity(i);
+    }
 }
